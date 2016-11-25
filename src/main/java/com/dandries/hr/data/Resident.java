@@ -15,13 +15,19 @@ import lombok.Data;
  *
  * @author jonathandandries
  */
-public @Builder(builderMethodName = "hiddenBuilder") @Data class Resident implements Serializable {
+public @Builder
+@Data
+class Resident implements Serializable {
+
     private String name;
-    private List<Hospital> preferredHospitals;
-    
+    private List<Hospital> preferredHospitals = new ArrayList<>();
+
     public static ResidentBuilder builder(String name) {
-        return hiddenBuilder()
-                .name(name)
-                .preferredHospitals(new ArrayList<>());
+        return new ResidentBuilder().name(name);
     }
+
+    public static class ResidentBuilder {
+        private List<Hospital> preferredHospitals = new ArrayList<>();
+    }
+
 }
