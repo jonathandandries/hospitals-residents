@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Singular;
 
 /**
  *
@@ -21,6 +20,8 @@ public @Builder(builderMethodName = "hiddenBuilder") @Data class Resident implem
     private List<Hospital> preferredHospitals;
     
     public static ResidentBuilder builder(String name) {
-        return hiddenBuilder().name(name).preferredHospitals(new ArrayList<>());
+        return hiddenBuilder()
+                .name(name)
+                .preferredHospitals(new ArrayList<>());
     }
 }

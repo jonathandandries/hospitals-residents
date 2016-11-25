@@ -15,9 +15,6 @@ public class Application implements CommandLineRunner {
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
-    
-    @Value("${cmecf.selectAttorneySchedules.sql}")
-    private String selectAttorneySchedulesSql;
 
     @Override
     public void run(String... strings) throws Exception {
