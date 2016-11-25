@@ -5,9 +5,12 @@
  */
 package com.dandries.hr.data;
 
+import com.dandries.hr.util.ColumnPrinter;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.Builder;
 import lombok.Data;
 
@@ -28,6 +31,17 @@ class Resident implements Serializable {
 
     public static class ResidentBuilder {
         private List<Hospital> preferredHospitals = new ArrayList<>();
+    }
+    
+    public static ColumnPrinter getPreferencesPrinter(List<Resident> residents) {
+        ColumnPrinter printer = new ColumnPrinter();
+        for (Resident res : residents) {
+            printer.addLine(res.getName() + " Preferences");
+            printer.addLine((res.getName() + " Preferences").replaceAll(".", "-"));
+            printer.addLine(res.getPreferredHospitals().stream().map(Hospital::getName).collect(Collectors.joining(" | ")));
+            printer.addLine("");
+        }
+        return printer;
     }
 
 }

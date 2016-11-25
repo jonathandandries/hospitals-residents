@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Optional;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Singular;
 
 /**
  *
@@ -87,7 +86,23 @@ class Hospital {
         return acceptedResidents.remove(acceptedResidents.size() - 1);
     }
 
-    public static ColumnPrinter getPrinter(List<Hospital> hospitals) {
+    public static ColumnPrinter getPreferencesPrinter(List<Hospital> hospitals) {
+        ColumnPrinter printer = new ColumnPrinter();
+        for (Hospital hosp : hospitals) {
+            printer.addLine(hosp.getName() + " Preferences");
+            printer.addLine((hosp.getName() + " Preferences").replaceAll(".", "-"));
+            for (Resident res : hosp.getPreferredResidents()) {
+                printer.addLine(res.getName())
+                        .addLine("")
+                        .addLine("")
+                        .addLine("");
+            }
+            printer.addLine("");
+        }
+        return printer;
+    }
+
+    public static ColumnPrinter getAcceptedPrinter(List<Hospital> hospitals) {
         ColumnPrinter printer = new ColumnPrinter().addLine(hospitals.stream().map(Hospital::getName).toArray(String[]::new));
         printer.addLine(hospitals.stream().map(h -> h.getName().replaceAll(".", "-")).toArray(String[]::new));
         Optional<Integer> max = hospitals.stream().map(Hospital::getCapacity).reduce(Integer::max);

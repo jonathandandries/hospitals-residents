@@ -3,17 +3,12 @@ package com.dandries.hr;
 import com.dandries.hr.data.Hospital;
 import com.dandries.hr.data.Resident;
 import com.dandries.hr.logic.DeferredAcceptance;
-import com.dandries.hr.util.ColumnPrinter;
-import java.util.ArrayList;
 import static java.util.Arrays.asList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -45,6 +40,10 @@ public class Application implements CommandLineRunner {
         residentMap.put("Chen", Resident.builder("Chen")
                 .preferredHospitals(asList(hospitalMap.get("City"),
                         hospitalMap.get("Mercy"))).build());
+        residentMap.put("Tran", Resident.builder("Tran")
+                .preferredHospitals(asList(
+                        hospitalMap.get("General"),
+                        hospitalMap.get("City"))).build());
         residentMap.put("Ford", Resident.builder("Ford")
                 .preferredHospitals(asList(
                         hospitalMap.get("City"),
@@ -66,6 +65,7 @@ public class Application implements CommandLineRunner {
         hospitalMap.get("City").setPreferredResidents(asList(
                 residentMap.get("Eastman"),
                 residentMap.get("Anderson"),
+                residentMap.get("Tran"),
                 residentMap.get("Chen"),
                 residentMap.get("Davis"),
                 residentMap.get("Ford")
@@ -74,12 +74,14 @@ public class Application implements CommandLineRunner {
                 residentMap.get("Eastman"),
                 residentMap.get("Anderson"),
                 residentMap.get("Ford"),
-                residentMap.get("Davis")
+                residentMap.get("Davis"),
+                residentMap.get("Tran")
         ));
 
         List<Resident> residentsToMatch = asList(
                 residentMap.get("Anderson"),
                 residentMap.get("Chen"),
+                residentMap.get("Tran"),
                 residentMap.get("Ford"),
                 residentMap.get("Davis"),
                 residentMap.get("Eastman")
@@ -91,8 +93,10 @@ public class Application implements CommandLineRunner {
                 hospitalMap.get("General")
         );
 
+        Resident.getPreferencesPrinter(residentsToMatch).print();
+        Hospital.getPreferencesPrinter(hospitalsToMatch).print();
         List<Hospital> hospitalMatches = DeferredAcceptance.optimizeForResidents(residentsToMatch, hospitalsToMatch);
-        Hospital.getPrinter(hospitalMatches).print();
+        Hospital.getAcceptedPrinter(hospitalMatches).print();
     }
 
     public void runCommons() {
@@ -452,7 +456,7 @@ public class Application implements CommandLineRunner {
                         hospitalMap.get("Team 6"),
                         hospitalMap.get("Team 8"),
                         hospitalMap.get("Team 5"))).build());
-         residentMap.put("Student 50", Resident.builder("Student 50")
+        residentMap.put("Student 50", Resident.builder("Student 50")
                 .preferredHospitals(asList(
                         hospitalMap.get("Team 7"),
                         hospitalMap.get("Team 2"),
@@ -522,7 +526,7 @@ public class Application implements CommandLineRunner {
                         hospitalMap.get("Team 7"),
                         hospitalMap.get("Team 2"),
                         hospitalMap.get("Team 8"))).build());
-         residentMap.put("Student 60", Resident.builder("Student 60")
+        residentMap.put("Student 60", Resident.builder("Student 60")
                 .preferredHospitals(asList(
                         hospitalMap.get("Team 4"),
                         hospitalMap.get("Team 7"),
@@ -585,7 +589,7 @@ public class Application implements CommandLineRunner {
                         hospitalMap.get("Team 7"),
                         hospitalMap.get("Team 5"),
                         hospitalMap.get("Team 10"))).build());
-        
+
         hospitalMap.get("Team 1").setPreferredResidents(asList(
                 residentMap.get("Student 15"),
                 residentMap.get("Student 5"),
@@ -813,7 +817,7 @@ public class Application implements CommandLineRunner {
                 residentMap.get("Student 67"),
                 residentMap.get("Student 68")
         );
-        
+
         List<Hospital> hospitalsToMatch = asList(
                 hospitalMap.get("Team 1"),
                 hospitalMap.get("Team 2"),
@@ -827,7 +831,9 @@ public class Application implements CommandLineRunner {
                 hospitalMap.get("Team 10")
         );
 
+        Resident.getPreferencesPrinter(residentsToMatch).print();
+        Hospital.getPreferencesPrinter(hospitalsToMatch).print();
         List<Hospital> hospitalMatches = DeferredAcceptance.optimizeForResidents(residentsToMatch, hospitalsToMatch);
-        Hospital.getPrinter(hospitalMatches).print();
+        Hospital.getAcceptedPrinter(hospitalMatches).print();
     }
 }
